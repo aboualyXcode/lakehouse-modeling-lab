@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lakehouse Modeling Lab: Medallion, Star Schema and Data Vault 2.0 on Databricks</title>
+  <meta name="description" content="An interactive playground for lakehouse data modeling. Inject real production events and watch Bronze, Silver, a star schema and a Data Vault react, with the Databricks SQL that builds each table.">
+  <meta name="theme-color" content="#f5f2ea">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="./"><img src="assets/favicon.svg" alt="" width="26" height="26"><span>Lakehouse Modeling Lab</span></a>
+    <nav class="tabs" aria-label="Views">
+      <button type="button" class="tab" data-view="pipeline" aria-pressed="true">Pipeline</button>
+      <button type="button" class="tab" data-view="questions" aria-pressed="false">Star vs Vault</button>
+      <button type="button" class="tab" data-view="advisor" aria-pressed="false">Choose an approach</button>
+    </nav>
+    <a class="guide-link" id="guide-link" href="https://github.com/aboualyXcode/lakehouse-modeling-lab/tree/main/docs" target="_blank" rel="noopener">Read the guide ↗</a>
+  </header>
+
+  <main>
+    <!-- ================= Pipeline ================= -->
+    <section id="view-pipeline" class="view pipeline" aria-label="Pipeline">
+      <aside class="side">
+        <section class="panel" aria-labelledby="ev-h">
+          <h2 id="ev-h">Production events</h2>
+          <p class="muted">Things that happen to real pipelines. Queue a few, then run the pipeline.</p>
+          <div id="actions" class="actions"></div>
+        </section>
+        <section class="panel" aria-labelledby="pend-h">
+          <div class="row-between"><h2 id="pend-h">Next batch</h2><span id="pend-count" class="count"></span></div>
+          <ol id="pending" class="pending"></ol>
+          <button id="run" class="btn-run" type="button">Run pipeline</button>
+          <button id="reset" class="btn-link" type="button">Start over</button>
+        </section>
+        <section class="panel" aria-labelledby="log-h">
+          <h2 id="log-h">What happened</h2>
+          <div id="log" class="log" aria-live="polite"></div>
+        </section>
+      </aside>
+
+      <div class="work">
+        <section class="lineage" aria-label="Lineage: click a table to inspect it">
+          <div class="lane-label lane-a">Dimensional path</div>
+          <div class="lane-label lane-b">Data Vault path</div>
+          <div class="node node-bronze" data-node="bronze"></div>
+          <div class="node node-silver" data-node="silver"></div>
+          <div class="node node-gold" data-node="gold"></div>
+          <div class="node node-vault" data-node="raw_vault"></div>
+          <div class="node node-bvault" data-node="business_vault"></div>
+        </section>
+
+        <section class="viewer" aria-labelledby="tv-name">
+          <div class="viewer-head">
+            <div>
+              <h2 id="tv-name" class="tv-name"></h2>
+              <p id="tv-grain" class="tv-grain"></p>
+            </div>
+            <div class="seg" role="group" aria-label="Show">
+              <button type="button" class="seg-btn" data-pane="rows" aria-pressed="true">Rows</button>
+              <button type="button" class="seg-btn" data-pane="sql" aria-pressed="false">How it's built</button>
+            </div>
+          </div>
+          <p id="tv-keys" class="tv-keys"></p>
+          <div id="tv-rows" class="tv-rows"></div>
+          <div id="tv-sql" class="tv-sql" hidden></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ================= Star vs Vault ================= -->
+    <section id="view-questions" class="view questions" aria-label="Star vs Vault" hidden>
+      <div class="intro">
+        <h1>One question, two models</h1>
+        <p>Every business question below is answered twice: from the Gold star schema, and from the Business Vault. Change something on the Pipeline tab, run it, and come back. The answers stay identical, but look at how differently the SQL has to work for them.</p>
+      </div>
+      <div id="qa" class="qa"></div>
+    </section>
+
+    <!-- ================= Advisor ================= -->
+    <section id="view-advisor" class="view advisor" aria-label="Choose an approach" hidden>
+      <div class="intro">
+        <h1>Which approach fits?</h1>
+        <p>Answer six questions about your situation. The ranking explains itself, and the full reasoning is in the guide.</p>
+      </div>
+      <div class="adv-grid">
+        <form id="adv-form" class="adv-form"></form>
+        <div id="adv-result" class="adv-result" aria-live="polite"></div>
+      </div>
+      <h2 class="matrix-h">Side by side</h2>
+      <div class="matrix-wrap"><table id="matrix" class="matrix"></table></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Everything runs in your browser. The same pipeline runs on Databricks from the <a href="https://github.com/aboualyXcode/lakehouse-modeling-lab/tree/main/notebooks" target="_blank" rel="noopener">notebooks</a>. Stagedoor is fictional.</p>
+  </footer>
+
+  <script src="js/md5.js"></script>
+  <script src="js/model.js"></script>
+  <script src="js/sql.js"></script>
+  <script src="js/advisor.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
