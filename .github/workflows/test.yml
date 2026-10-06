@@ -1,0 +1,18 @@
+# Tests the playground's lakehouse model: hashing, scenarios, hundreds of random pipeline runs,
+# the approach advisor, and that every SQL snippet points at a real notebook.
+name: Test the playground model
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Run model tests
+        run: node tests/model.test.js
